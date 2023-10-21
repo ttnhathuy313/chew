@@ -10,17 +10,18 @@ import tensorflow as tf
 def create_model(dataset_shape=(None, 80, 17), verbose=20):
     logger.add(sys.stdout, level=verbose)
     model = Sequential()
-    model.add(Conv1D(100, 10, activation='relu'))
-    model.add(Conv1D(100, 10, activation='relu'))
+    model.add(Conv1D(10, 1, activation='relu'))
+    model.add(Conv1D(10, 1, activation='relu'))
     model.add(MaxPooling1D(3))
-    model.add(Conv1D(160, 10, activation='relu'))
-    model.add(Conv1D(160, 10, activation='relu'))
+    model.add(Conv1D(5, 2, activation='relu'))
+    model.add(Conv1D(5, 2, activation='relu'))
     model.add(GlobalAveragePooling1D())
     model.add(Dropout(0.5))
     model.add(Dense(1, activation='sigmoid'))
     model.build(input_shape=dataset_shape)
 
-    model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=False), optimizer='adam', metrics=['accuracy'])
+    model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=False),
+                  optimizer=tf.keras.optimizers.Adam(learning_rate = 0.001), metrics=['accuracy'])
     logger.info(f"Model: {model.summary()}")
     model.save("./conv1d-model.keras")
     logger.info(f"Saved model to ./conv1d-model.keras")
